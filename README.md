@@ -1,8 +1,7 @@
 # slog-gorm
 
-`slog-gorm` provides a slog adapter, highly configurable, for [gorm logger](https://gorm.io/docs/logger.html) 
+`slog-gorm` provides a slog adapter, highly configurable, for [gorm logger](https://gorm.io/docs/logger.html)
 to have homogeneous logs between your application / script and gorm.
-
 
 ## Key features
 
@@ -12,10 +11,15 @@ to have homogeneous logs between your application / script and gorm.
 - can log all SQL messages or just the errors if you prefer.
 - can define a custom `slog.Level` for errors, slow queries or the other logs.
 
-
 ## Requirement
 
 - `golang >= 1.21`
+
+## Install
+
+```sh
+go get github.com/alfonmga/slog-gorm
+```
 
 ## Usage
 
@@ -26,8 +30,8 @@ import (
 
     "gorm.io/driver/sqlite"
     "gorm.io/gorm"
-	
-    slogGorm "github.com/orandin/slog-gorm"
+
+    slogGorm "github.com/alfonmga/slog-gorm"
 )
 
 // Create an slog-gorm instance
@@ -64,16 +68,16 @@ gormLogger := slogGorm.New(
 
 ### Use your custom `slog.Level`
 
-As some loggers *(e.g. syslog)* have their own logging levels, `slog-gorm` lets you
+As some loggers _(e.g. syslog)_ have their own logging levels, `slog-gorm` lets you
 use them to ensure the consistency of your logs and make them easier to understand.
 
 You can set the logging level for these log types:
 
 | Type                        | Description                          | Default           |
-|-----------------------------|--------------------------------------|-------------------|
+| --------------------------- | ------------------------------------ | ----------------- |
 | `slogGorm.ErrorLogType`     | For SQL errors                       | `slog.LevelError` |
 | `slogGorm.SlowQueryLogType` | For slow queries                     | `slog.LevelWarn`  |
-| `slogGorm.DefaultLogType`   | For other messages *(default level)* | `slog.LevelInfo`  |
+| `slogGorm.DefaultLogType`   | For other messages _(default level)_ | `slog.LevelInfo`  |
 
 Example:
 
@@ -93,10 +97,10 @@ logger := slog.New(syslogHandler)
 gormLogger := slogGorm.New(
     slogGorm.WithLogger(logger),
 
-    // Set logging level for SQL errors	
+    // Set logging level for SQL errors
     slogGorm.SetLogLevel(slogGorm.ErrorLogType, LOG_ERR)
-	
-    // Set logging level for slow queries	
+
+    // Set logging level for slow queries
     slogGorm.SetLogLevel(slogGorm.SlowQueryLogType, LOG_NOTICE)
 
     // Set logging level for other messages (default level)
@@ -109,9 +113,9 @@ gormLogger := slogGorm.New(
 ```golang
 customLogger := sloggorm.New(
 	sloggorm.WithSlowThreshold(500 * time.Millisecond), // to identify slow queries
-	
+
 	sloggorm.WithRecordNotFoundError(), // don't ignore not found errors
-	
+
 	sloggorm.WithSourceField("origin"), // instead of "file" (by default)
 	slogGorm.WithErrorField("err"),     // instead of "error" (by default)
 )
